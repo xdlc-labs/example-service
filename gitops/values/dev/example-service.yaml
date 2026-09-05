@@ -1,6 +1,6 @@
 image:
   repository: ghcr.io/xdlc-labs/example-service
-  tag: "sha-d30f46b53295"
+  tag: "sha-db50ec3b4ddf"
   pullPolicy: IfNotPresent
 
 replicaCount: 1
