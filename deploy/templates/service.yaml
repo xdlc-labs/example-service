@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: example-service
+  labels:
+    app: example-service
+spec:
+  selector:
+    app: example-service
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: http

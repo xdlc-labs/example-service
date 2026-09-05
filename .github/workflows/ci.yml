@@ -2,7 +2,15 @@ name: ci
 on:
   push:
     branches: [develop, main]
+    paths-ignore:
+      - "gitops/values/**"
+      - "**.md"
   pull_request:
+
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -13,3 +21,45 @@ jobs:
           go-version: "1.25.x"
       - run: go test ./...
       - run: go build -o /tmp/example-service .
+
+  image:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: meta
+        run: |
+          TAG="sha-${GITHUB_SHA::12}"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "image=ghcr.io/xdlc-labs/example-service" >> "$GITHUB_OUTPUT"
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.tag }}
+            ${{ steps.meta.outputs.image }}:latest
+      - name: Write image tag to gitops values [skip ci]
+        run: |
+          set -euo pipefail
+          FILE=gitops/values/dev/example-service.yaml
+          TAG="${{ steps.meta.outputs.tag }}"
+          sed -i -E "s/^([[:space:]]*tag:[[:space:]]*).*/\\1\"${TAG}\"/" "$FILE"
+          if git diff --quiet -- "$FILE"; then
+            echo "tag already ${TAG}"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$FILE"
+          git commit -m "ci: bump dev image tag to ${TAG} [skip ci]"
+          git push origin HEAD:develop

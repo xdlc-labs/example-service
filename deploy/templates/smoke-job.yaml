@@ -1,0 +1,32 @@
+{{- if .Values.smoke.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: smoke-e2e
+  labels:
+    app: example-service
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  ttlSecondsAfterFinished: 600
+  backoffLimit: 2
+  template:
+    metadata:
+      labels:
+        app: example-service-smoke
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: smoke
+          image: curlimages/curl:8.11.1
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              echo "probing example-service:{{ .Values.service.port }}/healthz"
+              curl -fsS "http://example-service:{{ .Values.service.port }}/healthz"
+              echo
+              echo "smoke ok"
+{{- end }}
