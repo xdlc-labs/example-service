@@ -25,8 +25,17 @@ spec:
             - -c
             - |
               set -e
-              echo "probing example-service:{{ .Values.service.port }}/healthz"
-              curl -fsS "http://example-service:{{ .Values.service.port }}/healthz"
-              echo
-              echo "smoke ok"
+              URL="http://example-service.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}/healthz"
+              echo "probing $URL"
+              for i in 1 2 3 4 5 6 7 8 9 10; do
+                if curl -fsS "$URL"; then
+                  echo
+                  echo "smoke ok"
+                  exit 0
+                fi
+                echo "attempt $i failed; sleep 3"
+                sleep 3
+              done
+              echo "smoke failed"
+              exit 1
 {{- end }}
