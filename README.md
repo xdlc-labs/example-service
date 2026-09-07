@@ -4,9 +4,9 @@
 [![Go](https://img.shields.io/badge/go-1.25-00ADD8?logo=go&logoColor=white)](go.mod)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-PR testing battleground for [xdlc-agent](https://github.com/xdlc-labs/xdlc-agent).
+Public demo HTTP service for [xdlc-agent](https://github.com/xdlc-labs/xdlc-agent).
 
-Tiny HTTP service so CI, DEV smoke, and prod-health have something real to fail: `/healthz` for probes, `/metrics` (and optional OTLP) for the prod-health gate.
+Tiny service so CI, DEV smoke, and prod-health have something real to fail: `/healthz` for probes, `/metrics` (and optional OTLP) for the prod-health gate.
 
 ## Run locally
 
@@ -35,6 +35,7 @@ Do not break `main` by hand. Graded overlays that open PRs against a scratch tre
 ## In this org
 
 - [xdlc-agent](https://github.com/xdlc-labs/xdlc-agent)
+- [Airlock](https://github.com/xdlc-labs/airlock)
 - [documentation](https://xdlc-labs.github.io/documentation/)
 - [fixtures](https://github.com/xdlc-labs/fixtures)
 
