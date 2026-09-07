@@ -28,16 +28,14 @@ repos:
 
 Then [install xdlc](https://xdlc-labs.github.io/documentation/xdlc-agent/install/) and run `xdlc daemon`.
 
-## Planted breaks
+## Try a Fix without changing this repo
 
-Do not break `main` by hand. Graded overlays that open PRs against a scratch tree live in [xdlc-labs/fixtures](https://github.com/xdlc-labs/fixtures).
+Do not break `main` by hand. Sample PRs that fail CI live in [xdlc-labs/fixtures](https://github.com/xdlc-labs/fixtures).
 
-## In this org
+## Related
 
-- [xdlc-agent](https://github.com/xdlc-labs/xdlc-agent)
-- [Airlock](https://github.com/xdlc-labs/airlock)
-- [documentation](https://xdlc-labs.github.io/documentation/)
-- [fixtures](https://github.com/xdlc-labs/fixtures)
+- [xdlc-agent](https://github.com/xdlc-labs/xdlc-agent) — daemon that can Fix this app when CI fails
+- [Guides](https://xdlc-labs.github.io/documentation/)
 
 ## License
 
