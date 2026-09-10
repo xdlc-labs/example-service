@@ -56,6 +56,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/healthz", healthz)
+	mux.HandleFunc("/version", versionHandler(svc))
 	mux.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
 		start := time.Now()
 		w.WriteHeader(http.StatusOK)
