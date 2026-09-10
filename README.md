@@ -26,7 +26,7 @@ repos:
     gates: [ci]
 ```
 
-Then [install xdlc](https://xdlc.dev/agent/docs) and run `xdlc daemon`.
+Then [install xdlc](https://xdlc-labs.github.io/documentation/xdlc-agent/install/) and run `xdlc daemon`.
 
 ## Try a Fix without changing this repo
 
@@ -35,7 +35,7 @@ Do not break `main` by hand. Sample PRs that fail CI live in [xdlc-labs/fixtures
 ## Related
 
 - [xdlc-agent](https://github.com/xdlc-labs/xdlc-agent) — daemon that can Fix this app when CI fails
-- [Guides](https://xdlc.dev/docs)
+- [Guides](https://xdlc-labs.github.io/documentation/)
 
 ## License
 
