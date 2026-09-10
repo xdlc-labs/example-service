@@ -55,10 +55,7 @@ func main() {
 	}
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/healthz", func(w http.ResponseWriter, _ *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write([]byte("ok"))
-	})
+	mux.HandleFunc("/healthz", healthz)
 	mux.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
 		start := time.Now()
 		w.WriteHeader(http.StatusOK)
