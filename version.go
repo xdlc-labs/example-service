@@ -11,7 +11,7 @@ var version = "dev"
 // versionInfo is what /version returns. The console reads it to show
 // which build is serving.
 type versionInfo struct {
-	Version string `json:"verison"`
+	Version string `json:"version"`
 	Service string `json:"service"`
 }
 
