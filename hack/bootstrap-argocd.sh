@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 # Bootstrap ArgoCD on the current kube-context (minikube) and register
-# example-service Applications from services/example-service/gitops/apps.
+# example-service Applications from gitops/apps.
 set -euo pipefail
-ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-SVC="$ROOT/services/example-service"
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
@@ -21,7 +20,7 @@ kubectl -n argocd create secret generic repo-example-service \
   --from-literal=username=git
 kubectl -n argocd label secret repo-example-service argocd.argoproj.io/secret-type=repository
 
-# GHCR pull for private package (same token).
+# GHCR pull for private package (same token). The token needs read:packages.
 kubectl create namespace dev --dry-run=client -o yaml | kubectl apply -f -
 kubectl create namespace prod --dry-run=client -o yaml | kubectl apply -f -
 for ns in dev prod; do
@@ -34,8 +33,8 @@ for ns in dev prod; do
     -p '{"imagePullSecrets":[{"name":"ghcr-pull"}]}'
 done
 
-kubectl apply -f "$SVC/gitops/apps/dev/example-service.yaml"
-kubectl apply -f "$SVC/gitops/apps/prod/example-service.yaml"
+kubectl apply -f "$ROOT/gitops/apps/dev/example-service.yaml"
+kubectl apply -f "$ROOT/gitops/apps/prod/example-service.yaml"
 
 echo "ArgoCD admin password:"
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d
