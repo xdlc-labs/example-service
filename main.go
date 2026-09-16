@@ -49,7 +49,12 @@ func main() {
 	}
 	latency, err := meter.Float64Histogram("http_request_duration_seconds",
 		metric.WithDescription("HTTP latency"),
-		metric.WithUnit("s"))
+		metric.WithUnit("s"),
+		// Default OTel buckets start at 5s. HTTP p95 then looks like
+		// 4750ms and trips a 500ms prod-health threshold on a healthy
+		// service. These bounds are seconds, sized for in-process HTTP.
+		metric.WithExplicitBucketBoundaries(0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5),
+	)
 	if err != nil {
 		log.Fatal(err)
 	}
